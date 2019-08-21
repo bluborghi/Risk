@@ -1,33 +1,90 @@
-document.getElementById("out").innerHTML = calc();
 
-function calc() {
+
+document.getElementById("out2").innerHTML = calc2();
+
+
+
+
+function calc2() {
+    var d = new Date();
+    var t = d.getTime();
     var tot = 0;
-    var _3a = 0;
-    var _2a1d = 0;
-    var _1a2d = 0;
-    var _3d = 0;
-    for (var a1 = 1; a1<=6; a1++){
-        for (var a2 = 1; a2<=a1; a1++){
-            for (var a3 = 1; a3<=a2; a1++){
-                for (var d1 = 1; d1<=6; a1++){
-                    for (var d2 = 1; d2<=d1; a1++){
-                        for (var d3 = 1; d3<=d2; a1++){
+    var losses = [0, 0, 0, 0];
+    for (var a1 = 1; a1 <= 6; a1++) {
+        for (var a2 = 1; a2 <= 6; a2++) {
+            for (var a3 = 1; a3 <= 6; a3++) {
+                for (var d1 = 1; d1 <= 6; d1++) {
+                    for (var d2 = 1; d2 <= 6; d2++) {
+                        for (var d3 = 1; d3 <= 6; d3++) {
                             tot++;
-                            var a_ko = 0;
-                            var d_ko = 0;
-                            d1>=a1 ? a_ko++ : d_ko++;
-                            d2>=a2 ? a_ko++ : d_ko++;
-                            d3>=a3 ? a_ko++ : d_ko++;
-                            if (d_ko==3) _3d++;
-                            else if (d_ko==2) _1a2d++;
-                            else if (d_ko==1) _2a1d++;
-                            else _3a++;
+                            var defence = [d1, d2, d3].sort();
+                            var attack = [a1, a2, a3].sort();
+                            var lossCount = 0;
+                            for (var i = 0; i < defence.length; i++) {
+                                if (defence[i] >= attack[i]) lossCount++;
+                            }
+                            losses[lossCount]++;
                         }
                     }
                 }
             }
         }
     }
-    return "tot "+tot+"; 3a uccisi "+_3a+"; 2a uccisi "+_2a1d+"; 1a ucciso "+_1a2d+"; 0a uccisi "+_3d+";";
+    t = d.getTime() - t;
+    return "tot " + tot + "; 3a uccisi " + losses[3] / tot * 100 + "; 2a uccisi " + losses[2] / tot * 100 + "; 1a ucciso " + losses[1] / tot * 100 + "; 0a uccisi " + losses[0] / tot * 100 + "; Time: " + t;
+
+}
+
+function calc3(n_attack, n_defence) {
+    var n_min;
+    n_attack < n_defence ? n_min = n_attack : n_min = n_defence;
+    if (n_min < 1) return;
+
+    a_rolls = getRolls(n_attack, n_min);
+    d_rolls = getRolls(n_defence, n_min);
+
+
+}
+
+function getRolls(thrown, needed) {
+    var rolls;
+    if (thrown == 3) {
+        for (var r1 = 1; r1 <= 6; r1++)
+            for (var r2 = 1; r2 <= 6; r2++)
+                for (var r3 = 1; r3 <= 6; r3++) {
+                    var roll = [r1, r2, r3].sort(function (a, b) { return b - a });
+                    rolls.push(roll);
+                }
+    }
+    else if (thrown == 2) {
+        for (var r1 = 1; r1 <= 6; r1++)
+            for (var r2 = 1; r2 <= 6; r2++)
+                rolls.push([r1, r2].sort(function (a, b) { return b - a }));
+    }
+    else if (thrown == 1) {
+        for (var r1 = 1; r1 <= 6; r1++)
+            rolls.push([r1].sort(function (a, b) { return b - a }));
+    }
+
+    if (needed < thrown) {
+        if (needed == 1) {
+            for (var i = 0; i <= rolls.length; i++) {
+                rolls[i] = rolls[i][0];
+            }
+        }
+        else if (needed == 2) {
+            for (var i = 0; i <= rolls.length; i++) {
+                rolls[i] = [rolls[i][0], rolls[i][1]];
+            }
+        }  
+    }
+
+    return rolls;
+}
+
+//
+function calcChances(attack, defence) {
+
+
 
 }
