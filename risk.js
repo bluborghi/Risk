@@ -1,8 +1,7 @@
 
 
-document.getElementById("out2").innerHTML = calc2();
-
-
+document.getElementById("out3").innerHTML = calc2();
+calc3(3, 2);
 
 
 function calc2() {
@@ -39,20 +38,26 @@ function calc3(n_attack, n_defence) {
     var n_min;
     n_attack < n_defence ? n_min = n_attack : n_min = n_defence;
     if (n_min < 1) return;
+   
+    var a_rolls = getRolls(n_attack, n_min);
+    var d_rolls = getRolls(n_defence, n_min);
+    
+    document.getElementById("out1").innerHTML = a_rolls;
+    document.getElementById("out2").innerHTML = d_rolls;
 
-    a_rolls = getRolls(n_attack, n_min);
-    d_rolls = getRolls(n_defence, n_min);
-
+    
 
 }
 
 function getRolls(thrown, needed) {
-    var rolls;
+    var rolls = [];
     if (thrown == 3) {
         for (var r1 = 1; r1 <= 6; r1++)
             for (var r2 = 1; r2 <= 6; r2++)
                 for (var r3 = 1; r3 <= 6; r3++) {
+                    
                     var roll = [r1, r2, r3].sort(function (a, b) { return b - a });
+                    
                     rolls.push(roll);
                 }
     }
@@ -67,16 +72,18 @@ function getRolls(thrown, needed) {
     }
 
     if (needed < thrown) {
+        var needed_rolls = [];
         if (needed == 1) {
-            for (var i = 0; i <= rolls.length; i++) {
-                rolls[i] = rolls[i][0];
+            for (var i = 0; i < rolls.length; i++) {
+                needed_rolls.push(rolls[i][0]);                
             }
         }
         else if (needed == 2) {
-            for (var i = 0; i <= rolls.length; i++) {
-                rolls[i] = [rolls[i][0], rolls[i][1]];
+            for (var i = 0; i < rolls.length; i++) {
+                needed_rolls[i] = [rolls[i][0], rolls[i][1]];
             }
         }  
+        return needed_rolls;
     }
 
     return rolls;
